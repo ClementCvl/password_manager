@@ -17,4 +17,4 @@ Projet personnel de gestionnaire de mot de passe avec base de donnée locale et 
 
 MP pour plus d'info.
 
-**© Clément CUVILLIER - 2017 **
+**© Clément CUVILLIER - 2017**
