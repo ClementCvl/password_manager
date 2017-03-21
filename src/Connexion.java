@@ -23,14 +23,14 @@ public class Connexion {
     }
 
     public void createIfNotExist() {
-        String query1 = "CREATE TABLE IF NOT EXISTS User (id integer PRIMARY KEY AUTOINCREMENT, login text NOT NULL, password text NOT NULL);" ;
-        String query2 = "CREATE TABLE IF NOT EXISTS Password ( id integer PRIMARY KEY  AUTOINCREMENT, pass text NOT NULL, name text NOT NULL, note text, idUser integer, FOREIGN KEY (idUser) REFERENCES User(id));" ;
+        String query1 = "CREATE TABLE IF NOT EXISTS User (id integer PRIMARY KEY, login text NOT NULL, password text NOT NULL);" ;
+        String query2 = "CREATE TABLE IF NOT EXISTS Password ( id integer PRIMARY KEY, pass text NOT NULL, name text NOT NULL, note text, idUser integer, FOREIGN KEY (idUser) REFERENCES User(id));" ;
         String testAdd = "INSERT INTO User(login, password) VALUES ('iClemich', 'azerty123');";
+
         try{
             statement.executeUpdate(query1);
             statement.executeUpdate(query2);
             statement.executeUpdate(testAdd);
-
         } catch (SQLException e){
             e.printStackTrace();
         }
