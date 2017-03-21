@@ -9,15 +9,16 @@ public class Principal
     public static void main(String[] args) {
         Connexion connexion = new Connexion("database/Database.db");
         connexion.connect();
-        ResultSet resultSet = connexion.query("SELECT * FROM Book WHERE Title LIKE 'Programmation JAVA' ");
+        //connexion.createIfNotExist();
+        ResultSet resultSet = connexion.query("SELECT * FROM User");
         try {
             while (resultSet.next()) {
-                System.out.println("Titre : "+resultSet.getString("Title"));
+                System.out.println("id : "+resultSet.getString("id") + " login: " +resultSet.getString("login") + " password: " +resultSet.getString("password"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        connexion.close();
+       // connexion.close();
     }
 }

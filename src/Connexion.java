@@ -2,6 +2,7 @@
  * Created by Clément on 20/03/2017.
  */
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -9,7 +10,7 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 
 public class Connexion {
-    private String DBPath = "Chemin aux base de donnée SQLite";
+    private String DBPath;
     private Connection connection = null;
     private Statement statement = null;
 
@@ -21,6 +22,21 @@ public class Connexion {
         DBPath = dBPath;
     }
 
+    public void createIfNotExist() {
+        String query1 = "CREATE TABLE IF NOT EXISTS User (id integer PRIMARY KEY AUTOINCREMENT, login text NOT NULL, password text NOT NULL);" ;
+        String query2 = "CREATE TABLE IF NOT EXISTS Password ( id integer PRIMARY KEY  AUTOINCREMENT, pass text NOT NULL, name text NOT NULL, note text, idUser integer, FOREIGN KEY (idUser) REFERENCES User(id));" ;
+        String testAdd = "INSERT INTO User(login, password) VALUES ('iClemich', 'azerty123');";
+        try{
+            statement.executeUpdate(query1);
+            statement.executeUpdate(query2);
+            statement.executeUpdate(testAdd);
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+
     /**
      * Connexion a la database du DBPath
      */
@@ -30,6 +46,7 @@ public class Connexion {
             connection = DriverManager.getConnection("jdbc:sqlite:" + DBPath);
             statement = connection.createStatement();
             System.out.println("Connexion a " + DBPath + " avec succès");
+            createIfNotExist();
         } catch (ClassNotFoundException notFoundException) {
             notFoundException.printStackTrace();
             System.out.println("Erreur de connexion");
