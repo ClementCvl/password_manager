@@ -25,12 +25,10 @@ public class Connexion {
     public void createIfNotExist() {
         String query1 = "CREATE TABLE IF NOT EXISTS User (id integer PRIMARY KEY, login text NOT NULL, password text NOT NULL);" ;
         String query2 = "CREATE TABLE IF NOT EXISTS Password ( id integer PRIMARY KEY, pass text NOT NULL, name text NOT NULL, note text, idUser integer, FOREIGN KEY (idUser) REFERENCES User(id));" ;
-        String testAdd = "INSERT INTO User(login, password) VALUES ('iClemich', 'azerty123');";
-
         try{
             statement.executeUpdate(query1);
             statement.executeUpdate(query2);
-            statement.executeUpdate(testAdd);
+
         } catch (SQLException e){
             e.printStackTrace();
         }
@@ -61,26 +59,54 @@ public class Connexion {
      */
     public void close() {
         try {
-            connection.close();
             statement.close();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Execute une requete sql
+     * Execute une requete sql de recherche
      * @param requet
      */
-    public ResultSet query(String requet) {
+    public ResultSet query(String query) {
         ResultSet resultat = null;
         try {
-            resultat = statement.executeQuery(requet);
+            resultat = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Erreur dans la requet : " + requet);
+            System.out.println("Erreur dans la requête : " + query);
         }
         return resultat;
+    }
 
+    /**
+     * Execute un update
+     *
+     */
+    public void update(String query){
+        try{
+            statement.executeUpdate(query);
+        }catch(SQLException sqlException) {
+            sqlException.printStackTrace();
+            System.out.println("Erreur dans la requête : " + query);
+        }
+    }
+
+    /**
+     *
+     * @param query
+     * @return l'id de l'update
+     */
+    public int updateRetId(String query){
+        int id=0;
+        try{
+            id = statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+        }catch(SQLException sqlException) {
+            sqlException.printStackTrace();
+            System.out.println("Erreur dans la requête : " + query);
+        }
+        return id;
     }
 }

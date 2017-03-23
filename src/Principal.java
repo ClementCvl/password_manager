@@ -9,16 +9,12 @@ public class Principal
     public static void main(String[] args) {
         Connexion connexion = new Connexion("database/Database.db");
         connexion.connect();
-        //connexion.createIfNotExist();
-        ResultSet resultSet = connexion.query("SELECT * FROM User");
-        try {
-            while (resultSet.next()) {
-                System.out.println("id : "+resultSet.getString("id") + " login: " +resultSet.getString("login") + " password: " +resultSet.getString("password"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        User user = new User("iClemich", "azerty123", connexion);
+        user.addUser();
+        Password pass1 = new Password("testAdPass1234556789--)çé", "facebook", "Premier mot de passe entré", user.getId(), connexion);
+        pass1.addPassword();
+        user.selectAllPasswordByUser();
 
-       // connexion.close();
+        connexion.close();
     }
 }
