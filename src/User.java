@@ -57,9 +57,10 @@ public class User {
         return id;
     }
     public void addUser(){
-        String query= "INSERT INTO User(login, password) VALUES(";
+        SHA512 passhash = new SHA512(this.getPassword());
+        String query = "INSERT INTO User(login, password) VALUES(";
         query += "'" + this.getLogin() +"',";
-        query += "'" + this.getPassword() +"');";
+        query += "'" + passhash.getPass() +"');";
         this.connexion.update(query);
         this.setId(selectLastId());
     }

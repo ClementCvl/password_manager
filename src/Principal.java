@@ -6,15 +6,14 @@ import java.sql.SQLException;
 
 public class Principal
 {
+    static User actualUser;
     public static void main(String[] args) {
         Connexion connexion = new Connexion("database/Database.db");
         connexion.connect();
-        User user = new User("iClemich", "azerty123", connexion);
-        user.addUser();
-        Password pass1 = new Password("testAdPass1234556789--)çé", "facebook", "Premier mot de passe entré", user.getId(), connexion);
-        pass1.addPassword();
-        user.selectAllPasswordByUser();
 
+        actualUser = connexion.connectUser("iClemich","azerty123");
+        if(actualUser != null)
+            actualUser.selectAllPasswordByUser();
         connexion.close();
     }
 }

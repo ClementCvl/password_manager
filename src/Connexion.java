@@ -23,11 +23,23 @@ public class Connexion {
     }
 
     public void createIfNotExist() {
-        String query1 = "CREATE TABLE IF NOT EXISTS User (id integer PRIMARY KEY, login text NOT NULL, password text NOT NULL);" ;
-        String query2 = "CREATE TABLE IF NOT EXISTS Password ( id integer PRIMARY KEY, pass text NOT NULL, name text NOT NULL, note text, idUser integer, FOREIGN KEY (idUser) REFERENCES User(id));" ;
+        String query1 = "CREATE TABLE IF NOT EXISTS User (id integer PRIMARY KEY, login text NOT NULL, password text NOT NULL);";
+        String query2 = "CREATE TABLE IF NOT EXISTS Password ( id integer PRIMARY KEY, pass text NOT NULL, name text NOT NULL, note text, idUser integer, FOREIGN KEY (idUser) REFERENCES User(id));";
+        SHA512 hashpass = new SHA512("azerty123");
+        String query3 = "INSERT INTO User(login, password) VALUES('iClemich', '"+hashpass.getPass()+"');";
+        String query4 = "INSERT INTO Password(pass, name, note, idUser) VALUES('testAdPass1234556789--)çé', 'facebook', 'Premier mdp entré', 1)";
+        String query5 = "SELECT COUNT(id) AS nbid FROM User";
+
         try{
             statement.executeUpdate(query1);
             statement.executeUpdate(query2);
+            ResultSet resultSet = this.query(query5);
+            if(resultSet.getInt("nbid") == 0){
+                statement.executeUpdate(query3);
+                statement.executeUpdate(query4);
+            }
+
+
 
         } catch (SQLException e){
             e.printStackTrace();
@@ -108,5 +120,27 @@ public class Connexion {
             System.out.println("Erreur dans la requête : " + query);
         }
         return id;
+    }
+
+    public User connectUser(String UserLogin, String UserPassword){
+        SHA512 passhash = new SHA512(UserPassword);
+        new String("").equals(passhash.getPass());
+        String query="SELECT id FROM User WHERE login=" +"'"+ UserLogin +"'"+" AND password=" +"'"+ passhash.getPass() +"';";
+        ResultSet resultSet = this.query(query);
+        try {
+            if (resultSet.next()) {
+                User user = new User(UserLogin, passhash.getPass(), this);
+                user.setId(resultSet.getInt("id"));
+                return user;
+
+            } else {
+
+                System.out.println("Mauvais mot de passe ou pseudo");
+                return null;
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return null;
     }
 }
