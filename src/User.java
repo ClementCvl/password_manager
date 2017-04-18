@@ -129,14 +129,17 @@ public class User {
     /**
      * Retrieve passwords created by the user.
      */
-    public void selectAllPasswordByUser(){
+    public vector<Password> selectAllPasswordByUser(){
         ResultSet resultSet = this.connexion.query("SELECT * FROM Password WHERE idUser="+this.getId()+";");
+        vector<Password> listPass = new vector();
         try {
             while (resultSet.next()) {
                 System.out.println("id : "+resultSet.getInt("id"));
                 System.out.println("name : "+resultSet.getString("name"));
                 try{
                     System.out.println("mot de passe : "+Encryption.decrypt(this.getPassword(), resultSet.getString("pass")));
+                    Password pass = new Password(Encryption.decrypt(this.getPassword(), resultSet.getString("pass")), resultSet.getString("name"), resultSet.getString("note"), resultSet.getString("idUser"), this.connexion);
+                    vector.pushback(pass);
                 }catch(Exception e){
                     e.printStackTrace();
                 }
