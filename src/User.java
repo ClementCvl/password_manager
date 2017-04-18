@@ -50,7 +50,7 @@ public class User {
 
     /**
      *
-     * @return The password (hashed or not) of an user.
+     * @return The hashed password of an user.
      */
     public String getPassword() {
         return password;
@@ -135,7 +135,11 @@ public class User {
             while (resultSet.next()) {
                 System.out.println("id : "+resultSet.getInt("id"));
                 System.out.println("name : "+resultSet.getString("name"));
-                System.out.println("mot de passe : "+resultSet.getString("pass"));
+                try{
+                    System.out.println("mot de passe : "+Encryption.decrypt(this.getPassword(), resultSet.getString("pass")));
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
                 System.out.println("note : "+resultSet.getString("note"));
                 System.out.println("id utilisateur : "+resultSet.getString("idUser"));
             }

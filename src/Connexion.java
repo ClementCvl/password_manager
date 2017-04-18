@@ -27,7 +27,13 @@ public class Connexion {
         String query2 = "CREATE TABLE IF NOT EXISTS Password ( id integer PRIMARY KEY, pass text NOT NULL, name text NOT NULL, note text, idUser integer, FOREIGN KEY (idUser) REFERENCES User(id));";
         SHA512 hashpass = new SHA512("azerty123");
         String query3 = "INSERT INTO User(login, password) VALUES('iClemich', '"+hashpass.getPass()+"');";
-        String query4 = "INSERT INTO Password(pass, name, note, idUser) VALUES('testAdPass1234556789--)çé', 'facebook', 'Premier mdp entré', 1)";
+        String pass = new String();
+        try{
+            pass = Encryption.encrypt(hashpass.getPass(), "testAdPass1234556789--)çé");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        String query4 = "INSERT INTO Password(pass, name, note, idUser) VALUES('"+pass+"', 'facebook', 'Premier mdp entré', 1)";
         String query5 = "SELECT COUNT(id) AS nbid FROM User";
 
         try{

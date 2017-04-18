@@ -109,9 +109,15 @@ public class Password {
     /**
      * Add a password to the database. This function use the value contains in the attribute.
      */
-    public void addPassword(){
+    public void addPassword(User user){
+        String encryptpass = new String();
+        try{
+            encryptpass = Encryption.encrypt(user.getPassword(), this.getPass());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         String query= "INSERT INTO Password(pass, note, name, idUser) VALUES(";
-        query += "'" + this.getPass() +"',";
+        query += "'" + encryptpass +"',";
         query += "'" + this.getNote() +"',";
         query += "'" + this.getName() +"',";
         query += "'" + this.getIdUser() + "');";
