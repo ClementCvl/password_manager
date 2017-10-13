@@ -4,6 +4,7 @@
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Vector;
 
 /**
  * Created by Clément on 23/03/2017.
@@ -129,17 +130,17 @@ public class User {
     /**
      * Retrieve passwords created by the user.
      */
-    public vector<Password> selectAllPasswordByUser(){
+    public Vector<Password> selectAllPasswordByUser(){
         ResultSet resultSet = this.connexion.query("SELECT * FROM Password WHERE idUser="+this.getId()+";");
-        vector<Password> listPass = new vector();
+        Vector<Password> listPass = new Vector();
         try {
             while (resultSet.next()) {
                 System.out.println("id : "+resultSet.getInt("id"));
                 System.out.println("name : "+resultSet.getString("name"));
                 try{
                     System.out.println("mot de passe : "+Encryption.decrypt(this.getPassword(), resultSet.getString("pass")));
-                    Password pass = new Password(Encryption.decrypt(this.getPassword(), resultSet.getString("pass")), resultSet.getString("name"), resultSet.getString("note"), resultSet.getString("idUser"), this.connexion);
-                    vector.pushback(pass);
+                    Password pass = new Password(Encryption.decrypt(this.getPassword(), resultSet.getString("pass")), resultSet.getString("name"), resultSet.getString("note"), resultSet.getInt("idUser"), this.connexion);
+                    listPass.add(pass);
                 }catch(Exception e){
                     e.printStackTrace();
                 }
@@ -149,5 +150,7 @@ public class User {
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
+        return listPass;
+
     }
 }
